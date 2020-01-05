@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { signIn, signOut } from '../actions/index';
 
 class GoogleAuth extends React.Component{
-    state = { isSignedIn: null};
+    //state = { isSignedIn: null};
 
     componentDidMount(){
         //async request or something - calling to google server to load for stuff
@@ -22,7 +24,11 @@ class GoogleAuth extends React.Component{
                 //and ComponentDidMount() is like constructor()
                 this.auth = window.gapi.auth2.getAuthInstance();
                 //true or false 
-                this.setState({ isSignedIn: this.auth.isSignedIn.get() });
+                //this.setState({ isSignedIn: this.auth.isSignedIn.get() });
+                
+                //les 222 - you are now passing the true/false to onAuthChange so can trigger this.props.signIn or out
+                this.onAuthChange(this.auth.isSignedIn.get());
+
                 //the listen - pass call back function to change the state to refresh the page
                 //this updates the text of the google button every time someone signs in and out 
                 this.auth.isSignedIn.listen(this.onAuthChange);
@@ -32,33 +38,43 @@ class GoogleAuth extends React.Component{
         });
     };
     //ability to state auth on the fly - whhy do you care?
-    onAuthChange = () =>{
-        this.setState({ isSignedIn: this.auth.isSignedIn.get() });
+    // onAuthChange = () =>{
+    //     this.setState({ isSignedIn: this.auth.isSignedIn.get() });
+    // };
+
+    onAuthChange = (isSignedIn) =>{
+        if (isSignedIn){
+            //why action creator props now
+            this.props.signIn(this.auth.currentUser.get().getId());
+        } else {
+            this.props.signOut();
+        }
     };
 
 
-    onSignIn = () =>{
+    onSignInClick = () =>{
         //how the fuck is this.auth now a global variable
         this.auth.signIn();
     };
 
-    onSignOut = () =>{
+    onSignOutClick = () =>{
         this.auth.signOut();
     };
 
     renderAuthButton(){
-        if (this.state.isSignedIn === null){
+        //les 222 - no more this.state.issignedin - your state is now through props to redux store 
+        if (this.props.isSignedIn === null){
             return null;
-        } else if (this.state.isSignedIn){
+        } else if (this.props.isSignedIn){
             return (
-                <button onClick = {this.onSignOut} className="ui red google button">
+                <button onClick = {this.onSignOutClick} className="ui red google button">
                     <i className="google icon"/>
                     Sign Out
                 </button>
             );
         } else {
             return (
-                <button onClick = {this.onSignIn} className="ui red google button">
+                <button onClick = {this.onSignInClick} className="ui red google button">
                     <i className="google icon"/>
                     Sign In With Google
                 </button>
@@ -79,4 +95,9 @@ class GoogleAuth extends React.Component{
     }
 };
 
-export default GoogleAuth;
+const mapStateToProps = (state) =>{
+    return { isSignedIn: state.auth.isSignedIn}
+};
+
+//connect action creator to store
+export default connect(mapStateToProps, {signIn, signOut})(GoogleAuth);
