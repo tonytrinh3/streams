@@ -1,5 +1,7 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
+import { connect } from 'react-redux';
+import {createStream } from "../../actions"
 
 class StreamCreate extends React.Component{
     renderError(formProps){
@@ -54,12 +56,19 @@ class StreamCreate extends React.Component{
 
     //the name formValues doesn't matter
     //the function name onSubmit doesn't matter as well...
-    onSubmit(formValues){
+    onSubmit = (formValues) =>{
+
+
         //event.preventDefault();
         //event handler isnt need to be used
         //formValues takes title and description
         console.log(formValues);
-    }
+
+        //les 242 - you are passing formValues (title and description) through to the action creator 
+        //you are using this.props bc you have wired the action creator into the react 
+        this.props.createStream(formValues);
+
+    };
 
 
     render(){
@@ -103,8 +112,11 @@ const validate = (formValues) =>{
 
 //validate is built into reduxform
 //streamCreate is form name
-export default reduxForm({
+//les 242
+const formWrapped = reduxForm({
     form: 'streamCreate',
     validate: validate
 })(StreamCreate);
 
+//remember createStream is an action creator 
+export default connect(null, { createStream })(formWrapped);
