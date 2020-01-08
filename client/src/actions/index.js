@@ -6,7 +6,7 @@ import {SIGN_IN,
     FETCH_STREAM,
     DELETE_STREAM,
     EDIT_STREAM } from './types';
-import { getFormInitialValues } from "redux-form";
+//import { getFormInitialValues } from "redux-form";
 
 
 export const signIn = (userId) =>{
@@ -30,10 +30,17 @@ export const signOut = () =>{
 //you are stating the url in the axios - passing through formValues
 
 //les 243 - dispatch? you passing dispatch from redux - dispatch also carries the load to the store
+//les 252 getState is also included redux or redux-thunk if you are doing async
+//getstate allows you to pull into the redux store and pull out info
+
 export const createStream = (formValues) =>{
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        //or const { userId } = getState().auth;
+        const userId = getState().auth.userId;
+        
         //you get the data from response due to axios
-        const response = await streams.post('/streams', formValues);
+        //les 252 - so when we are posing info of our stream. we post info from the form (title and description) as well as userId
+        const response = await streams.post('/streams', {...formValues, userId });
 
         dispatch({ type: CREATE_STREAM, payload: response.data})
     };

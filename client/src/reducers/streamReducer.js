@@ -15,14 +15,19 @@ export default (state = {}, action ) =>{
         //same as below
         // const newState = {...state};
         // newState[action.payload.id] = action.payload; //this line specifically adds the new line to the object
+        //{action.payload.id : action.payload} in newState
         // return newState //returns all of the newState object
 
         //les 249
         //taking the payload - which is an array full of objects - using the object's id as the key id for this super object which will be the newstate
+        
         case FETCH_STREAMS:
+        //return {id:{id:action.payload}} repeat
             return {...state, ..._.mapKeys(action.payload, "id")};
         case FETCH_STREAM:
-            return {...state, [action.payload.id]: action.payload };
+            const newState = {...state};
+            newState[action.payload.id] = action.payload;
+            return newState;
         case CREATE_STREAM:
             return {...state, [action.payload.id]: action.payload };
         case EDIT_STREAM:
