@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 import { fetchStreams } from '../../actions';
 
 //les 250 - change to class bc we want to call our action component in componentDidMount
@@ -15,10 +16,27 @@ class StreamList extends React.Component{
     //les 242
     //i thinnk json server automatically creates the id when you create a new title/description entry or axios but i doubt axios
 
+
+    renderAdmin(stream){
+        if (stream.userId === this.props.currentUserId){
+            return(
+                <div className="right floated content">
+                    <Link to={`/streams/edit/${stream.id}`}className="ui button primary">Edit</Link>
+                    <button className="ui button negative">
+                        Delete
+                    </button>
+                </div>
+            ) 
+        }
+    }
+
+
+
     renderList(){
         return this.props.streams.map(stream =>{
             return (
                 <div className="item" key = {stream.id}>
+                    {this.renderAdmin(stream)}
                     <i className="large middle aligned icon camera"/>
                     <div className="content">
                         {stream.title}
@@ -27,7 +45,21 @@ class StreamList extends React.Component{
                 </div>
             )
         })
+    };
+
+    //les 254 for explanation
+    renderCreate(){
+        if(this.props.isSignedIn){
+            return(
+                <div style = {{ textAlign: 'right'}}>
+                    <Link to = "/streams/new" className = "ui button primary">
+                        Create Stream
+                    </Link>
+                </div>
+            )
+        }
     }
+
 
     //so when you want to return a method - you have to call this.renderList in order for the method point back to this class instead of react.component
     //you also have to put in a div
@@ -35,10 +67,12 @@ class StreamList extends React.Component{
     render(){
 
         return (
-            <div className="some">
+            <div>
             <h2>Streams </h2>
                 <div className="ui celled list  ">{this.renderList()}</div>
+                <div>{this.renderCreate()}</div>
             </div>
+
 
          
             
@@ -56,7 +90,11 @@ const mapStateToProps = (state) =>{
     //Object.values(something) which equals ["some", "hi"]
 
     //so now you put {action.payload.id: {action.payload.id : action.payload} } into Object.values, you now get [{action.payload.id: action.payload}]
-    return { streams: Object.values(state.streams)};
+    return { 
+        streams: Object.values(state.streams),
+        currentUserId: state.auth.userId,
+        isSignedIn: state.auth.isSignedIn
+    };
 }
 
 //connecting the action creator in this class in order to pass some info to the prop into the fetchStream to get to the reducer to update state

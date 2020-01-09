@@ -1,4 +1,5 @@
 import streams from "../apis/streams";
+import history from '../history';
 import {SIGN_IN, 
     SIGN_OUT, 
     CREATE_STREAM,
@@ -43,6 +44,12 @@ export const createStream = (formValues) =>{
         const response = await streams.post('/streams', {...formValues, userId });
 
         dispatch({ type: CREATE_STREAM, payload: response.data})
+
+        //les 255 do some programmatic to get back to root route
+        //les 259 
+        //push is how we navigate a user around
+        //we did this just so we can control the logic whether to kick someone to the main list page if they log in or not 
+        history.push('/');
     };
 
 };
