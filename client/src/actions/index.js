@@ -68,7 +68,8 @@ export const fetchStream = (id) =>{
     return async (dispatch) =>{
 
         const response = await streams.get(`/streams/${id}`);
-
+        //ok response is the data you get from the api or the data you fetch from our own server
+        //so the data is held here and reducer does what you want with the data
         dispatch({type: FETCH_STREAM, payload: response.data})
     }
 };
