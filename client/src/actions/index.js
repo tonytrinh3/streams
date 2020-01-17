@@ -77,9 +77,13 @@ export const fetchStream = (id) =>{
 //id of the stream and the formValues of that stream 
 export const editStream = (id, formValues) =>{
     return async (dispatch) =>{
-        const response = await streams.put(`/streams/${id}`, formValues);
+
+        //const response = await streams.put(`/streams/${id}`, formValues);
+
+        const response = await streams.patch(`/streams/${id}`, formValues);
 
         dispatch({ type: EDIT_STREAM, payload: response.data});
+        history.push('/');//les 271 we want to send our person after edit back to main page 
     }
 };
 
