@@ -1,0 +1,36 @@
+{
+  "streams": [
+    {
+      "title": "wef",
+      "description": "awef",
+      "id": 1
+    },
+    {
+      "title": "uhihi",
+      "description": "hihihi",
+      "id": 2
+    },
+    {
+      "title": "waef",
+      "description": "awefawef",
+      "id": 3
+    },
+    {
+      "title": "user",
+      "description": "user",
+      "userId": "115914775505299872385",
+      "id": 6
+    },
+    {
+      "title": "test",
+      "description": "testawefawef",
+      "id": 7
+    },
+    {
+      "title": "awfdb",
+      "description": "dfsdvfaewswfagrgr4w3dera4fw",
+      "userId": "115914775505299872385",
+      "id": 8
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 //les 258 change BrowserRouter to Router
-import { Router, Route} from "react-router-dom";
+import { Router, Route, Switch} from "react-router-dom";
 import StreamCreate from './streams/StreamCreate';
 import StreamDelete from './streams/StreamDelete';
 import StreamEdit from './streams/StreamEdit';
@@ -16,12 +16,17 @@ const App = () => {
             <Router history = {history}>
                 <div>
                     <Header/> 
-                    <Route path="/" exact component = {StreamList}/>
-                    <Route path="/streams/new" exact component = {StreamCreate}/>
-                    {/* les 262 add id for each individual id of streams to edit - show stream edit regardless of are id number */}
-                    <Route path="/streams/edit/:id" exact component = {StreamEdit}/>
-                    <Route path="/streams/delete" exact component = {StreamDelete}/>
-                    <Route path="/streams/show" exact component = {StreamShow}/>
+                    {/* les 285 - switch allows exact component */}
+                    <Switch>
+                        <Route path="/" exact component = {StreamList}/>
+                        <Route path="/streams/new" exact component = {StreamCreate}/>
+                        {/* les 262 add id for each individual id of streams to edit - show stream edit regardless of are id number */}
+                        <Route path="/streams/edit/:id" exact component = {StreamEdit}/>
+                        {/* les 280 */}
+                        <Route path="/streams/delete/:id" exact component = {StreamDelete}/>
+                        {/* les284 */}
+                        <Route path="/streams/:id" exact component = {StreamShow}/>
+                    </Switch>
                 </div>
             </Router>
         </div>
